@@ -15,7 +15,7 @@ var couponSchema = new Schema({
 });
 
 // update startDate on approval
-couponSchema.pre('save', (callback) => {
+couponSchema.pre('save', function(callback) {
     var coupon = this;
     
     if (!coupon.isModified('approvedDate')) return callback();

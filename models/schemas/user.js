@@ -13,11 +13,11 @@ var userSchema = new Schema({
     isSuperAdmin: {type: Boolean, index: true},
 });
 
-userSchema.virtual('name').get(() => {
+userSchema.virtual('name').get(function() {
     var name = "";
     if (this.firstName) {
         name = this.firstName;
-        if (this.lastName) name += ' ' + lastName;
+        if (this.lastName) name += ' ' + this.lastName;
     } else if (this.lastName) name = this.lastName;
     return name;
 });
