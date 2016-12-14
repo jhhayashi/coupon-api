@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 
 const config = require('./models/config');
 
+const users = require('./controllers/users');
+
 mongoose.connect(config.dbUrl, {server: {socketOptions: {keepAlive: 120}}});
 
 var app = express();
@@ -20,7 +22,26 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//================================================
+// Middleware
+//================================================
+router.param('id', (req, res, next, id) => {
+    if (!id.match(/^[0-9a-fA-F]{24}$/))
+        return res.status(400).send('Invalid ID');
+    next();
+});
 
+//================================================
+// Routes
+//================================================
+
+router.route('/users')
+    .get(users.getAllUsers)
+    .post(users.createUser);
+router.route('/users/:id')
+    .get(users.getUserById)
+    .put(users.updateUser)
+    .delete(users.deleteUserById);
 
 app.use('/', router);
 
