@@ -14,6 +14,18 @@ var couponSchema = new Schema({
     approvedDate: Date,
 });
 
+// update startDate on approval
+couponSchema.pre('save', (callback) => {
+    var coupon = this;
+    
+    if (!coupon.isModified('approvedDate')) return callback();
+
+    if (coupon.approvedDate > coupon.startDate)
+        coupon.startDate = coupon.approvedDate;
+
+    callback();
+});
+
 var Coupon = mongoose.model('Coupon', couponSchema);
 
 module.exports = Coupon;
