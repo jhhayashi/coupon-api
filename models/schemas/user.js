@@ -13,6 +13,15 @@ var userSchema = new Schema({
     isSuperAdmin: {type: Boolean, index: true},
 });
 
+userSchema.virtual('name').get(() => {
+    var name = "";
+    if (this.firstName) {
+        name = this.firstName;
+        if (this.lastName) name += ' ' + lastName;
+    } else if (this.lastName) name = this.lastName;
+    return name;
+});
+
 var User = mongoose.model('User', userSchema);
 
 module.exports = User;
