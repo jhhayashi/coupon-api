@@ -2,17 +2,25 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-    firstName: String,
-    lastName: String,
-    classYear: Number,
-    email: String,
-    phone: String,
-    phoneProvider: String,
-    interests: [Number],
-    isAdmin: {type: Boolean, index: true},
-    isSuperAdmin: {type: Boolean, index: true},
-    hash: String,
-});
+        firstName: String,
+        lastName: String,
+        classYear: Number,
+        email: String,
+        phone: String,
+        phoneProvider: String,
+        interests: [Number],
+        isAdmin: {type: Boolean, index: true},
+        isSuperAdmin: {type: Boolean, index: true},
+        hash: String,
+    },
+    {
+        toObject: { getters: true },
+        timestamps: {
+            createdAt: 'createdDate',
+            updateAt: 'updatedDate'
+        },
+    }
+);
 
 // ensure phone and provider if not admin, hash if admin
 userSchema.pre('save', function(callback) {
