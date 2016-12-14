@@ -6,11 +6,26 @@ var userSchema = new Schema({
     lastName: String,
     classYear: Number,
     email: String,
-    phone: {type: String, required: true},
-    phoneProvider: {type: String, required: true},
+    phone: String,
+    phoneProvider: String,
     interests: [Number],
     isAdmin: {type: Boolean, index: true},
     isSuperAdmin: {type: Boolean, index: true},
+    hash: String,
+});
+
+// ensure phone and provider if not admin, hash if admin
+userSchema.pre('save', function(callback) {
+    if (this.Admin || this.isSuperAdmin) {
+        if (!this.hash)
+            return callback(new Error('No password'));
+    } else {
+        if (!this.phone)
+            return callback(new Error('No phone'));
+        if (!this.phoneProvider)
+            return callback(new Error('No phoneProvider'));
+    }
+    callback();
 });
 
 userSchema.virtual('name').get(function() {
