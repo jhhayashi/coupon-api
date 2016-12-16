@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
+const validator = require('email-validator');
 
 var userSchema = new Schema({
         firstName: String,
@@ -37,6 +38,8 @@ userSchema.pre('save', function(callback) {
             return callback(new Error('No phone'));
         if (!this.phoneProvider)
             return callback(new Error('No phoneProvider'));
+        if (this.email && !validator.validate(this.email))
+            return callback(new Error('Invalid email'));
     }
 
     callback();
