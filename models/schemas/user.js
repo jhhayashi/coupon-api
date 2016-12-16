@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const bcrypt = require('bcrypt-nodejs');
 
 var userSchema = new Schema({
         firstName: String,
@@ -22,20 +23,26 @@ var userSchema = new Schema({
     }
 );
 
-// ensure phone and provider if not admin, hash if admin
+// hash if admin, ensure phone and provider if not
 userSchema.pre('save', function(callback) {
-    if (this.Admin || this.isSuperAdmin) {
+    if (this.isAdmin || this.isSuperAdmin) {
         if (!this.hash)
             return callback(new Error('No password'));
-    } else {
+        if (this.isModified('hash'))
+            this.hash = bcrypt.hashSync(this.hash);
+    }
+
+    else {
         if (!this.phone)
             return callback(new Error('No phone'));
         if (!this.phoneProvider)
             return callback(new Error('No phoneProvider'));
     }
+
     callback();
 });
 
+// create full name
 userSchema.virtual('name').get(function() {
     var name = "";
     if (this.firstName) {
@@ -44,6 +51,17 @@ userSchema.virtual('name').get(function() {
     } else if (this.lastName) name = this.lastName;
     return name;
 });
+
+// methods for validating password
+userSchema.methods.comparePassword = function(pw, callback) {
+    bcrypt.compare(pw, this.hash, (err, isMatch) => {
+        if (err) return callback(err);
+        callback(null, isMatch);
+    });
+};
+userSchema.methods.comparePasswordSync = function(pw) {
+    return bcrypt.compareSync(pw, this.hash);
+};
 
 var User = mongoose.model('User', userSchema);
 
