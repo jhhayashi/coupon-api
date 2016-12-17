@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "build": "npm install",
-    "dev": "mongod -f ~/mongodb/coupon/mongod.conf & nodemon coupon-api.js"
+    "mongo": "mongod -f ~/mongodb/coupon/mongod.conf & echo $! > .mongo_pid",
+    "dev": "npm run mongo & nodemon coupon-api.js",
+    "mongo-stop": "kill $(cat .mongo_pid) && rm .mongo_pid"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
