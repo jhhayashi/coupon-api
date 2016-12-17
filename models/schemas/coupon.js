@@ -14,14 +14,13 @@ var couponSchema = new Schema({
     approvedDate: Date,
 });
 
-// update startDate on approval
 couponSchema.pre('save', function(callback) {
-    var coupon = this;
-    
-    if (!coupon.isModified('approvedDate')) return callback();
-
-    if (coupon.approvedDate > coupon.startDate)
-        coupon.startDate = coupon.approvedDate;
+    // ensure url starts with http://, https://, ftp://
+    if (this.url && !(/^((https?)|(ftp)):\/\/.+/.test(this.url)))
+        this.url = 'http://' + this.url;
+    // update startDate on approval
+    if (this.isModified('approvedDate') && this.approvedDate > this.startDate)
+        this.startDate = this.approvedDate;
 
     callback();
 });
