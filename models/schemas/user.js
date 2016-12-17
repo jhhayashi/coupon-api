@@ -27,6 +27,8 @@ var userSchema = new Schema({
 // hash if admin, ensure phone and provider if not
 userSchema.pre('save', function(callback) {
     if (this.isAdmin || this.isSuperAdmin) {
+        if (!this.email)
+            return callback(new Error('No email'));
         if (!this.hash)
             return callback(new Error('No password'));
         if (this.isModified('hash'))
