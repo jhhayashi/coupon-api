@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const config = require('./models/config');
 
 const users = require('./controllers/users');
+const coupons = require('./controllers/coupons');
 
 mongoose.connect(config.dbUrl, {server: {socketOptions: {keepAlive: 120}}});
 
@@ -42,6 +43,14 @@ router.route('/users/:id')
     .get(users.getUserById)
     .put(users.updateUser)
     .delete(users.deleteUserById);
+
+router.route('/coupons')
+    .get(coupons.getActiveCoupons)
+    .post(coupons.createCoupon);
+router.route('/coupons/:id')
+    .get(coupons.getCouponById)
+    .put(coupons.updateCoupon)
+    .delete(coupons.deleteCouponById);
 
 app.use('/', router);
 
