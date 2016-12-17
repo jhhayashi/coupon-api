@@ -16,8 +16,7 @@ exports.getUserById = (req, res, next) => {
 };
 
 exports.getUsersWithPhones = (req, res, next) => {
-    // TODO find non-null
-    User.find({}, (err, users) => {
+    User.find({phone: {$exists: true}}, (err, users) => {
         if (err) return next(err);
         res.json(users);
     });
@@ -32,17 +31,29 @@ exports.createUser = (req, res, next) => {
     });
 };
 
-// TODO
+// TODO validation
 exports.updateUser = (req, res, next) => {
-    return res.sendStatus(200);
+    User.findOneAndUpdate(req.params.id, req.body, (err, user) => {
+        if (err) return next(err);
+        if (!user) return res.status(404).send('No user with that ID');
+        return res.sendStatus(200);
+    });
 };
 
-// TODO
+// TODO auth
 exports.deleteUserById = (req, res, next) => {
-    return res.sendStatus(200);
+    User.findOneAndRemove(req.params.id, (err, user) => {
+        if (err) return next(err);
+        if (!user) return res.status(404).send('No user with that ID');
+        return res.sendStatus(200);
+    });
 };
 
-// TODO
+// TODO auth
 exports.deleteUserByPhone = (req, res, next) => {
-    return res.sendStatus(200);
+    User.findOneAndRemove({phone: req.params.phone}, (err, user) => {
+        if (err) return next(err);
+        if (!user) return res.status(404).send('No user with that ID');
+        return res.sendStatus(200);
+    });
 };

@@ -32,6 +32,12 @@ router.param('id', (req, res, next, id) => {
     next();
 });
 
+router.param('phone', (req, res, next, phone) => {
+    if (!(+phone) || phone.length !== 10)
+        return res.status(400).send('Invalid phone');
+    next();
+});
+
 //================================================
 // Routes
 //================================================
@@ -43,6 +49,8 @@ router.route('/users/:id')
     .get(users.getUserById)
     .put(users.updateUser)
     .delete(users.deleteUserById);
+router.route('/users/phone/:phone')
+    .delete(users.deleteUserByPhone);
 
 router.route('/coupons')
     .get(coupons.getActiveCoupons)
