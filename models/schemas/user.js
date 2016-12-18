@@ -46,7 +46,7 @@ userSchema.pre('save', function(callback) {
         return callback(new Error('Invalid email'));
 
     // validate phone
-    if (typeof this.phone !== 'String')
+    if (typeof this.phone !== 'string')
         return callback(new Error('Invalid phone'));
     var phone = '';
     for (var i = 0; i < this.phone.length; i++) {
