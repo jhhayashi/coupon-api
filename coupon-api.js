@@ -11,6 +11,8 @@ const config = require('./models/config');
 const users = require('./controllers/users');
 const coupons = require('./controllers/coupons');
 
+// http://mongoosejs.com/docs/promises.html
+mongoose.Promise = global.Promise;
 mongoose.connect(config.dbUrl, {server: {socketOptions: {keepAlive: 120}}});
 
 var app = express();
