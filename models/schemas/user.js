@@ -14,13 +14,14 @@ var userSchema = new Schema({
         isAdmin: {type: Boolean, index: true},
         isSuperAdmin: {type: Boolean, index: true},
         hash: String,
+        companyName: {type: String, trim: true},
         token: String,
     },
     {
         toObject: { getters: true },
         timestamps: {
             createdAt: 'createdDate',
-            updateAt: 'updatedDate'
+            updatedAt: 'updatedDate'
         },
     }
 );
@@ -29,18 +30,20 @@ var userSchema = new Schema({
 userSchema.pre('save', function(callback) {
     if (this.isAdmin || this.isSuperAdmin) {
         if (!this.email)
-            return callback(new Error('No email'));
+            return callback(new Error('Missing email'));
         if (!this.hash)
-            return callback(new Error('No password'));
+            return callback(new Error('Missing password'));
+        if (!this.companyName)
+            return callback(new Error('Missing companyName'));
         if (this.isModified('hash'))
             this.hash = bcrypt.hashSync(this.hash);
     }
 
     else {
         if (!this.phone)
-            return callback(new Error('No phone'));
+            return callback(new Error('Missing phone'));
         if (!this.phoneProvider)
-            return callback(new Error('No phoneProvider'));
+            return callback(new Error('Missing phoneProvider'));
     }
 
     if (this.email && !validator.validate(this.email))
