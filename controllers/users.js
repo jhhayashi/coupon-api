@@ -66,10 +66,6 @@ exports.createUser = (req, res, next) => {
 
     if (req.body.interests)
         userData.interests = req.body.interests;
-    if (req.body.isAdmin)
-        userData.isAdmin = !!req.body.isAdmin;
-    if (req.body.isSuperAdmin)
-        userData.isSuperAdmin = !!req.body.isSuperAdmin;
     if (req.body.password)
         userData.hash = req.body.password;
     if (req.body.hash)
