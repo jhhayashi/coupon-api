@@ -28,9 +28,29 @@ exports.loginUser = (req, res, next) => {
 };
 
 exports.adminRequired = (req, res, next) => {
-    next();
+    validateToken(req, res, next, {adminRequired: true});
 };
 
 exports.superAdminRequired = (req, res, next) => {
-    next();
+    validateToken(req, res, next, {superAdminRequired: true});
 };
+
+function validateToken(req, res, next, c) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+    if (!token) return res.status(403).send('Admin privileges required');
+
+    try {
+        var decoded = jwt.decode(token, config.secret);
+    } catch(err) {
+        return res.status(403).send('Failed to authenticate token');
+    }
+
+    if (c.adminRequired && !decoded.isAdmin && !decoded.isSuperAdmin)
+        return res.status(403).send('Admin privileges required');
+    if (c.superAdminRequired && !decoded.isSuperAdmin)
+        return res.status(403).send('Superadmin privileges required');
+
+    req.user = decoded;
+    next();
+}
