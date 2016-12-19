@@ -5,6 +5,12 @@ module.exports = {
     // secret for creating tokens
     secret: 'reughdjfbxmdgvhbgakbhjsadf',
 
+    // mail options
+    // Gmail has a limit of 500 recipients a day
+    emailFromName: 'HSA Coupons',
+    emailFromAddress: 'hsacoupons@gmail.com',
+    emailPassword: 'couponswoo',
+
 
     providers: [
         {

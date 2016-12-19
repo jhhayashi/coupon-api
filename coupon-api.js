@@ -11,6 +11,7 @@ const config = require('./models/config');
 const users = require('./controllers/users');
 const coupons = require('./controllers/coupons');
 const admins = require('./controllers/admins');
+const sender = require('./controllers/sender');
 const auth = require('./controllers/auth');
 
 // http://mongoosejs.com/docs/promises.html
@@ -49,6 +50,8 @@ router.param('phone', (req, res, next, phone) => {
 router.route('/users')
     .get(users.getAllUsers)
     .post(users.createUser);
+router.route('/users/send')
+    .post(auth.superAdminRequired, sender.sendAllCouponsToAllUsers);
 router.route('/users/:id')
     .get(users.getUserById)
     .put(users.updateUser)
@@ -59,6 +62,8 @@ router.route('/users/phone/:phone')
 router.route('/coupons')
     .get(coupons.getActiveCoupons)
     .post(coupons.createCoupon);
+router.route('/coupons/send')
+    .post(auth.superAdminRequired, sender.sendAllCouponsToAllUsers);
 router.route('/coupons/:id')
     .get(coupons.getCouponById)
     .put(coupons.updateCoupon)
@@ -66,6 +71,7 @@ router.route('/coupons/:id')
 
 router.route('/admins')
     .post(auth.superAdminRequired, admins.createAdmin);
+
 
 router.route('/auth/token')
     .post(auth.loginUser);
