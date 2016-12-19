@@ -10,6 +10,7 @@ const config = require('./models/config');
 
 const users = require('./controllers/users');
 const coupons = require('./controllers/coupons');
+const admins = require('./controllers/admins');
 const auth = require('./controllers/auth');
 
 // http://mongoosejs.com/docs/promises.html
@@ -62,6 +63,9 @@ router.route('/coupons/:id')
     .get(coupons.getCouponById)
     .put(coupons.updateCoupon)
     .delete(coupons.deleteCouponById);
+
+router.route('/admins')
+    .post(auth.superAdminRequired, admins.createAdmin);
 
 router.route('/auth/token')
     .post(auth.loginUser);
