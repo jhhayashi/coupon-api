@@ -8,7 +8,7 @@ var userSchema = new Schema({
         lastName: {type: String, trim: true},
         classYear: Number,
         email: {type: String, unique: true, sparse: true, trim: true},
-        phone: {type: String, unique: true, dropDups: true},
+        phone: {type: String, unique: true, sparse: true},
         phoneProvider: {type: String, trim: true},
         interests: [Number],
         isAdmin: {type: Boolean, index: true},
