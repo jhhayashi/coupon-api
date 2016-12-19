@@ -26,16 +26,24 @@ exports.getUsersWithPhones = (req, res, next) => {
 exports.createUser = (req, res, next) => {
     if (typeof req.body.phone !== 'string')
         return res.status(400).send('No phone');
-    if (typeof req.body.phoneProvider != 'string')
+    if (typeof req.body.phoneProvider !== 'string')
         return res.status(400).send('No phoneProvider');
 
-    var userData = {phoneProvider: req.body.phoneProvider};
+    var userData = {};
     if (req.body.firstName && typeof req.body.firstName === 'string')
         userData.firstName = req.body.firstName;
     if (req.body.lastName && typeof req.body.lastName === 'string')
         userData.lastName = req.body.lastName;
     if (typeof req.body.classYear === 'number')
         userData.classYear = req.body.classYear;
+
+    // check phone provider
+    // TODO notify webmaster to handle new provider
+    if (req.body.phoneProvider === 'other') {
+        if (typeof req.body['other-provider'] !== 'string')
+            return res.status(400).send('Missing other-provider');
+        userData.phoneProvider = req.body['other-provider'];
+    } else userData.phoneProvider = req.body.phoneProvider;
 
     // validate phone
     var phone = '';
@@ -46,7 +54,7 @@ exports.createUser = (req, res, next) => {
     if (phone.length !== 10)
         return res.status(400).send('Invalid phone');
     userData.phone = phone;
-
+    
     // validate email
     // http://emailregex.com
     if (req.body.email) {
