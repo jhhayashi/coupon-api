@@ -26,13 +26,12 @@ exports.sendAllCouponsToAllUsers = (req, res, next) => {
         })
     ])
     .then((values) => {
-        /*
         if (!values[0].length || !values[1].length)
             return res.sendStatus(200);
-        */
         var users = values[0];
         var coupons = values[1];
 
+        // build list of emails
         var emails = [];
         for (var i = 0; i < users.length; i++) {
             let u = users[i];
@@ -46,11 +45,24 @@ exports.sendAllCouponsToAllUsers = (req, res, next) => {
             emails.push(email);
         }
 
+        // build list of coupons
+        var texts = [];
+        for (var i = 0; i < coupons.length; i++) {
+            let c = coupons[i];
+            if (c.name)
+                texts.push(`${c.name}: ${c.url}`);
+            else if (c.compayName)
+                texts.push(`${c.companyName}: ${c.url}`);
+            else
+                texts.push(c.url);
+        }
+
         // build text
         var mailConfig = {
             from: `"${config.emailFromName}" <${config.emailFromAddress}>`,
             to: emails.join(', '),
-            text: 'test!'
+            subject: 'New Coupons',
+            text: texts.join('\n'),
         };
 
         transporter.sendMail(mailConfig, (err, info) => {
