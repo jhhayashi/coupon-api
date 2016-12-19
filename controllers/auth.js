@@ -18,7 +18,19 @@ exports.loginUser = (req, res, next) => {
                 return res.status(401).send('Incorrect password');
             var payload = user;
             var token = jwt.encode(payload, config.secret);
-            res.json({token});
+            user.token = token;
+            user.save((err) => {
+                if (err) return next(err);
+                res.json({token});
+            });
         });
     });
+};
+
+exports.adminRequired = (req, res, next) => {
+    next();
+};
+
+exports.superAdminRequired = (req, res, next) => {
+    next();
 };

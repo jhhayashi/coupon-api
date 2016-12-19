@@ -14,6 +14,7 @@ var userSchema = new Schema({
         isAdmin: {type: Boolean, index: true},
         isSuperAdmin: {type: Boolean, index: true},
         hash: String,
+        token: String,
     },
     {
         toObject: { getters: true },
