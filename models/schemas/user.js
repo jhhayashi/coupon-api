@@ -4,12 +4,12 @@ const bcrypt = require('bcrypt-nodejs');
 const validator = require('email-validator');
 
 var userSchema = new Schema({
-        firstName: String,
-        lastName: String,
+        firstName: {type: String, trim: true},
+        lastName: {type: String, trim: true},
         classYear: Number,
-        email: {type: String, unique: true, dropDups: true},
+        email: {type: String, unique: true, sparse: true, trim: true},
         phone: {type: String, unique: true, dropDups: true},
-        phoneProvider: String,
+        phoneProvider: {type: String, trim: true},
         interests: [Number],
         isAdmin: {type: Boolean, index: true},
         isSuperAdmin: {type: Boolean, index: true},
