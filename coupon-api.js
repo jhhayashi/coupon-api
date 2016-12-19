@@ -10,6 +10,7 @@ const config = require('./models/config');
 
 const users = require('./controllers/users');
 const coupons = require('./controllers/coupons');
+const auth = require('./controllers/auth');
 
 // http://mongoosejs.com/docs/promises.html
 mongoose.Promise = global.Promise;
@@ -61,6 +62,9 @@ router.route('/coupons/:id')
     .get(coupons.getCouponById)
     .put(coupons.updateCoupon)
     .delete(coupons.deleteCouponById);
+
+router.route('/auth/token')
+    .post(auth.loginUser);
 
 app.use('/', router);
 
