@@ -1,4 +1,5 @@
 const User = require('../models/schemas/user');
+const bcrypt = require('bcrypt-nodejs');
 
 exports.createAdmin = (req, res, next) => {
     if (typeof req.body.email !== 'string')
@@ -52,6 +53,10 @@ exports.createAdmin = (req, res, next) => {
         userData.hash = req.body.password;
     if (req.body.hash)
         userData.hash = req.body.hash;
+
+    // hash pw, since mongoose findOneAndUpdate bypasses hooks
+    // https://github.com/Automattic/mongoose/issues/964
+    userData.hash = bcrypt.hashSync(userData.hash);
 
     if (userData.phone)
         var userQuery = {$or: [{email: userData.email}, {phone: userData.phone}]};
