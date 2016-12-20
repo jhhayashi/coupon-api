@@ -62,6 +62,13 @@ function validateToken(req, res, next, c) {
     if (c.superAdminRequired && !decoded.isSuperAdmin)
         return res.status(403).send('Superadmin privileges required');
 
-    req.user = decoded;
-    next();
+    if (!decoded.id) return res.status(403).send('Invalid token');
+
+    User.findById(decoded.id, (err, user) => {
+        if (err) return next(err);
+        if (!user) return res.status(403).send('Invalid user ID');
+        if (token !== user.token) return res.status(403).send('Invalid token');
+        req.user = decoded;
+        next();
+    });
 }
