@@ -31,8 +31,9 @@ exports.getCouponById = (req, res, next) => {
     });
 };
 
-// TODO verification, auth
+// TODO validation
 exports.createCoupon = (req, res, next) => {
+    req.body.postedBy = req.user.id;
     var newCoupon = new Coupon(req.body);
     newCoupon.save((err, coupon) => {
         if (err) return next(err);
