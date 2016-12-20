@@ -64,7 +64,11 @@ exports.createAdmin = (req, res, next) => {
         var userQuery = {email: userData.email};
 
     User.findOneAndUpdate(userQuery, userData, {upsert:true}, (err, user) => {
-        if (err) return next(err);
+        if (err) {
+            if (err.code === 11000)
+                return res.status(400).send('Email or phone number already registered');    
+            return next(err);
+        }
         return res.sendStatus(200);
     });
 };
