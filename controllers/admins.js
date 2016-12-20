@@ -6,8 +6,10 @@ exports.createAdmin = (req, res, next) => {
         return res.status(400).send('Missing email');
     if (typeof req.body.password !== 'string' && typeof req.body.hash !== 'string')
         return res.status(400).send('Missing password');
+    if (typeof req.body.companyName !== 'string')
+        return res.status(400).send('Missing companyName');
 
-    var userData = {};
+    var userData = {companyName: req.body.companyName};
     if (req.body.firstName && typeof req.body.firstName === 'string')
         userData.firstName = req.body.firstName;
     if (req.body.lastName && typeof req.body.lastName === 'string')
