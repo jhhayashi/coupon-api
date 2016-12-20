@@ -16,7 +16,18 @@ exports.loginUser = (req, res, next) => {
         user.comparePassword(req.body.password, (err, isMatch) => {
             if (!isMatch)
                 return res.status(401).send('Incorrect password');
-            var payload = user;
+
+            // add relevant data to token
+            var payload = {
+                id: user._id,
+                email: user.email,
+                companyName: user.companyName,
+            };
+            if (user.firstName) payload.firstName = user.firstName;
+            if (user.lastName) payload.lastName = user.lastName;
+            if (user.isAdmin) payload.isAdmin = user.isAdmin;
+            if (user.isSuperAdmin) payload.isSuperAdmin = user.isSuperAdmin;
+
             var token = jwt.encode(payload, config.secret);
             user.token = token;
             user.save((err) => {
