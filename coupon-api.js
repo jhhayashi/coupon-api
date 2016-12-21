@@ -21,6 +21,9 @@ mongoose.connect(config.dbUrl, {server: {socketOptions: {keepAlive: 120}}});
 var app = express();
 var router = express.Router();
 
+// run init script
+if (app.get('env') === 'production') require('./init/init');
+
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
