@@ -33,7 +33,8 @@ exports.getCouponById = (req, res, next) => {
 
 // TODO validation
 exports.createCoupon = (req, res, next) => {
-    req.body.postedBy = req.user.id;
+    if (!req.body.postedBy) req.body.postedBy = req.user.id;
+    if (!req.body.companyName) req.body.companyName = req.user.companyName;
     var newCoupon = new Coupon(req.body);
     newCoupon.save((err, coupon) => {
         if (err) return next(err);

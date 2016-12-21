@@ -61,7 +61,7 @@ router.route('/users/phone/:phone')
 
 router.route('/coupons')
     .get(coupons.getActiveCoupons)
-    .post(coupons.createCoupon);
+    .post(auth.adminRequired, coupons.createCoupon);
 router.route('/coupons/send')
     .post(auth.superAdminRequired, sender.sendAllCouponsToAllUsers);
 router.route('/coupons/:id')
