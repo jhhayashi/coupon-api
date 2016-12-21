@@ -11,6 +11,7 @@ exports.getActiveCoupons = (req, res,next) => {
     var now = new Date();
     Coupon.find({
         $and: [
+            { approvedDate: {$exists: true} },
             { startDate: {$lt: now} },
             { $or: [
                 { endDate: {$gt: now} },
