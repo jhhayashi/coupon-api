@@ -23,6 +23,13 @@ exports.getActiveCoupons = (req, res,next) => {
     });
 };
 
+exports.getUnapprovedCoupons = (req, res, next) => {
+    Coupon.find({approvedDate: {$exists: false}}, (err, coupons) => {
+        if (err) return next(err);
+        res.json(coupons);
+    });
+};
+
 exports.getCouponById = (req, res, next) => {
     Coupon.findById(req.params.id, (err, coupon) => {
         if (err) return next(err);

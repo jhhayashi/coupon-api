@@ -75,6 +75,8 @@ router.route('/coupons/:id')
 
 router.route('/admins')
     .post(auth.superAdminRequired, admins.createAdmin);
+router.route('/admins/coupons')
+    .get(auth.superAdminRequired, coupons.getUnapprovedCoupons);
 
 
 router.route('/auth/token')

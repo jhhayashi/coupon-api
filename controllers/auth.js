@@ -67,7 +67,9 @@ function validateToken(req, res, next, c) {
     User.findById(decoded.id, (err, user) => {
         if (err) return next(err);
         if (!user) return res.status(403).send('Invalid user ID');
-        if (token !== user.token) return res.status(403).send('Invalid token');
+        // technically this isn't necessary
+        // jwt-simple returns the same token every login
+        if (token !== user.token) return res.status(403).send('Expired token');
         req.user = decoded;
         next();
     });
