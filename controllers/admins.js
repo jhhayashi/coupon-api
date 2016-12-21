@@ -14,8 +14,8 @@ exports.createAdmin = (req, res, next) => {
         userData.firstName = req.body.firstName;
     if (req.body.lastName && typeof req.body.lastName === 'string')
         userData.lastName = req.body.lastName;
-    if (typeof req.body.classYear === 'number')
-        userData.classYear = req.body.classYear;
+    if (typeof req.body.classYear !== 'undefined' && +req.body.classYear)
+        userData.classYear = +req.body.classYear;
 
     // check phone provider
     // TODO notify webmaster to handle new provider
