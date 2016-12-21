@@ -42,6 +42,18 @@ exports.createCoupon = (req, res, next) => {
     });
 };
 
+exports.approveCoupon = (req, res, next) => {
+    Coupon.findById(req.params.id)
+    .then((coupon) => {
+        if (!coupon) return res.status(404).send('No coupon with that ID');
+        if (coupon.approvedDate) return;
+        coupon.approvedDate = new Date();
+        return coupon.save();
+    }).then(() => res.sendStatus(200))
+    .catch((err) => next(err));
+};
+
+
 // TODO verification
 exports.updateCoupon = (req, res, next) => {
     Coupon.findOneAndUpdate({id: req.params.id}, req.body, (err, coupon) => {

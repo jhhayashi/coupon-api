@@ -69,6 +69,7 @@ router.route('/coupons/send')
     .post(auth.superAdminRequired, sender.sendAllCouponsToAllUsers);
 router.route('/coupons/:id')
     .get(coupons.getCouponById)
+    .post(auth.superAdminRequired, coupons.approveCoupon)
     .put(coupons.updateCoupon)
     .delete(coupons.deleteCouponById);
 
