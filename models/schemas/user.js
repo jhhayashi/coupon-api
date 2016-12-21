@@ -50,16 +50,18 @@ userSchema.pre('save', function(callback) {
         return callback(new Error('Invalid email'));
 
     // validate phone
-    if (typeof this.phone !== 'string')
-        return callback(new Error('Invalid phone'));
-    var phone = '';
-    for (var i = 0; i < this.phone.length; i++) {
-        if (!isNaN(this.phone[i]))
-            phone += this.phone[i];
+    if (this.phone) {
+        if (typeof this.phone !== 'string')
+            return callback(new Error('Invalid phone'));
+        var phone = '';
+        for (var i = 0; i < this.phone.length; i++) {
+            if (!isNaN(this.phone[i]))
+                phone += this.phone[i];
+        }
+        if (phone.length !== 10)
+            return callback(new Error('Invalid phone'));
+        this.phone = phone;
     }
-    if (phone.length !== 10)
-        return callback(new Error('Invalid phone'));
-    this.phone = phone;
 
     callback();
 });
