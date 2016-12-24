@@ -53,12 +53,12 @@ router.param('phone', (req, res, next, phone) => {
 //================================================
 
 router.route('/users')
-    .get(users.getAllUsers)
+    .get(auth.superAdminRequired, users.getAllUsers)
     .post(users.createUser);
 router.route('/users/send')
     .post(auth.superAdminRequired, sender.sendAllCouponsToAllUsers);
 router.route('/users/:id')
-    .get(users.getUserById)
+    .get(auth.superAdminRequired, users.getUserById)
     .put(users.updateUser)
     .delete(users.deleteUserById);
 router.route('/users/phone/:phone')
@@ -72,8 +72,8 @@ router.route('/coupons/send')
 router.route('/coupons/:id')
     .get(coupons.getCouponById)
     .post(auth.superAdminRequired, coupons.approveCoupon)
-    .put(coupons.updateCoupon)
-    .delete(coupons.deleteCouponById);
+    .put(auth.adminRequired, coupons.updateCoupon)
+    .delete(auth.adminRequired, coupons.deleteCouponById);
 router.route('/coupons/:id/send')
     .post(auth.superAdminRequired, sender.sendCouponById);
 
