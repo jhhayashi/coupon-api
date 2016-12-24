@@ -6,7 +6,8 @@
     "build": "npm install",
     "mongo": "mongod -f ~/mongodb/coupon/mongod.conf & echo $! > .mongo_pid",
     "dev": "npm run mongo & nodemon coupon-api.js",
-    "mongo-stop": "kill $(cat .mongo_pid) && rm .mongo_pid"
+    "mongo-stop": "kill $(cat .mongo_pid) && rm .mongo_pid",
+    "start": "node coupon-api.js"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
