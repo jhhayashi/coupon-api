@@ -66,8 +66,8 @@ exports.sendAllCouponsToAllUsers = (req, res, next) => {
 exports.sendCouponById = (req, res, next) => {
     var now = new Date();
     Promise.all([
-        User.find({phone: {$exists: true}}),
-        Coupon.findById(req.params.id)
+        User.find({phone: {$exists: true}}).exec(),
+        Coupon.findById(req.params.id).exec()
     ])
     .then((values) => {
         var users = values[0];

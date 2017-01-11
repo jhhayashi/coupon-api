@@ -22,7 +22,6 @@ exports.getUsersWithPhones = (req, res, next) => {
     });
 };
 
-// TODO auth
 exports.createUser = (req, res, next) => {
     if (typeof req.body.phone !== 'string')
         return res.status(400).send('No phone');
